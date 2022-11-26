@@ -4,6 +4,9 @@
   "description": "Lendsqr backend APIs with Node Js and Typescript",
   "main": "index.js",
   "scripts": {
+    "start": "node ./build/index.js",
+    "build": "tsc -p .",
+    "dev": "nodemon ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +18,14 @@
   "bugs": {
     "url": "https://github.com/aimelive/lendsqr-be-test/issues"
   },
-  "homepage": "https://github.com/aimelive/lendsqr-be-test#readme"
+  "homepage": "https://github.com/aimelive/lendsqr-be-test#readme",
+  "dependencies": {
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.11.9",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
+  }
 }
