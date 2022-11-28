@@ -8,9 +8,9 @@ const knexConfig: { [key: string]: Knex.Config } = {
     client: "mysql",
     connection: {
       host: process.env.DB_HOST,
-      user: process.env.DB_USERNAME,
+      user: process.env.DB_USERNAME || "root",
       password: process.env.DB_PWD,
-      database: process.env.DB_NAME,
+      database: process.env.DB_NAME || "demo_credit",
     },
     pool: {
       min: 2,

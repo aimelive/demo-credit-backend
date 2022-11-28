@@ -5,7 +5,7 @@ import AuthMiddleWare from "../middleware/auth.middleware";
 
 const userRoutes = express.Router();
 
-userRoutes.get("/", UserController.getUsers);
+userRoutes.get("/", AuthMiddleWare.loggedInUser, UserController.getUsers);
 userRoutes.post(
   "/register",
   UserValidate.register,
