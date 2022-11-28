@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { uuid } from "uuidv4";
 import knex_connect from "../../database/db_config";
 import { comparePwd, hashPwd } from "../../helpers/hash_pwd";
+import ErrorException, { Respond } from "../../helpers/response";
 import { generateToken } from "../../helpers/token";
 
 const db = knex_connect;
@@ -12,17 +13,12 @@ export default class UserController {
   static async getUsers(req: Request, res: Response) {
     try {
       const users = await db("users").select("*");
-      return res.status(200).json({
-        success: true,
-        message: "Users retrieved successfully!",
-        users: users,
+      return new Respond(true, "Users retrieved successfully!", res, 200, {
+        count: users.length,
+        users,
       });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        message: "An error occurred, please try again later.",
-        error: error,
-      });
+    } catch (error: any) {
+      return new ErrorException("Retrieving users failed", error.message, res);
     }
   }
   //creating uer
@@ -36,14 +32,9 @@ export default class UserController {
 
       //Creating user
       const userId = await db("users").insert({
-        fullname: req.body.fullname,
-        username: req.body.username,
-        email: req.body.email,
-        role: req.body.role,
         account_id: accountId,
         password: pwd,
-        created_at: new Date(),
-        updated_at: new Date(),
+        ...req.body,
       });
 
       //Creating user wallet
@@ -60,21 +51,15 @@ export default class UserController {
 
       //Returning the response to the user
       if (userData) {
-        return res.status(201).json({
-          status: true,
-          message: "user created successfully",
+        return new Respond(true, "user created successfully", res, 201, {
           user: userData,
           token,
         });
       }
 
       throw new Error("Something went wrong");
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        message: "An error occurred, please try again later.",
-        error: error,
-      });
+    } catch (error: any) {
+      return new ErrorException("Create user failed", error.message, res);
     }
   }
 
@@ -82,30 +67,18 @@ export default class UserController {
     try {
       const user = await db("users").where({ email: req.body.email }).first();
       if (!user) {
-        return res.status(400).json({
-          status: false,
-          message: "User does not exist",
-        });
+        return new Respond(false, "User does not exist", res, 404);
       }
       if (!(await comparePwd(req.body.password, user.password))) {
-        return res.status(400).json({
-          status: false,
-          message: "Incorrect password",
-        });
+        return new Respond(false, "Incorrect password", res, 400);
       }
       const token = generateToken(user.id);
-      return res.status(200).json({
-        status: true,
-        message: "User logged in successfully",
+      return new Respond(true, "User logged in successfully", res, 200, {
         user,
         token,
       });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        message: "An error occurred, please try again later.",
-        error,
-      });
+    } catch (error: any) {
+      return new ErrorException("Login failed", error.message, res);
     }
   }
 }

@@ -7,15 +7,12 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex("users").insert([
     {
-      id: 1,
       fullname: "Aime Ndayambaje",
       username: "aimelive",
       email: "aimendayambaje24@gmail.com",
       password: "$2b$10$rpkakxz5/f3QXZMfEy8JeuC1nSLRGKzIMQ7u4JG9cuDficVaFSOb.",
       role: "admin",
       account_id: "da28c4ac-590e-47aa-b368-8993bc1be8a1",
-      created_at: new Date(),
-      updated_at: new Date(),
     },
   ]);
 }

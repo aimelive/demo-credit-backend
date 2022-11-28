@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import knex_connect from "../../database/db_config";
+import ErrorException, { Respond } from "../../helpers/response";
 
 const db = knex_connect;
 
@@ -24,24 +25,21 @@ export default class TransationController {
       });
 
       if (transactions.length == 0) {
-        return res.status(200).json({
-          success: false,
-          message: "Transactions empty",
-        });
+        return new Respond(false, "Transactions empty", res);
       }
-      return res.status(200).json({
-        success: true,
-        message: "Transactions retrieved successfully",
-        count: transactions.length,
-        transactions,
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({
-        success: false,
-        message: "An error occurred, please try again later.",
-        error,
-      });
+      return new Respond(
+        true,
+        "Transactions retrieved successfully",
+        res,
+        200,
+        { count: transactions.length, transactions }
+      );
+    } catch (error: any) {
+      return new ErrorException(
+        "Retrieving transactions failed",
+        error.message,
+        res
+      );
     }
   }
 
@@ -51,23 +49,21 @@ export default class TransationController {
         .where({ id: req.params.id })
         .first();
       if (transaction) {
-        return res.status(200).json({
-          success: true,
-          message: "Transaction retrieved successfully",
-          transaction,
-        });
+        return new Respond(
+          true,
+          "Transaction retrieved successfully",
+          res,
+          200,
+          transaction
+        );
       }
-      return res.status(200).json({
-        success: true,
-        message: "Transaction does not exist",
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({
-        success: false,
-        message: "An error occurred, please try again later.",
-        error,
-      });
+      return new Respond(false, "transaction not found", res, 404);
+    } catch (error: any) {
+      return new ErrorException(
+        "Retrieve transacton failed",
+        error.message,
+        res
+      );
     }
   }
 }

@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("role", 255).notNullable();
     table.string("account_id", 255).notNullable().unique();
     table.string("password", 255).notNullable();
-    table.timestamps();
+    table.timestamps(true, true, true);
   });
 }
 

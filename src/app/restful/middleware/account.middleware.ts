@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { isUuid } from "uuidv4";
 import knex_connect from "../../database/db_config";
+import ErrorException, { Respond } from "../../helpers/response";
 
 const db = knex_connect;
 
@@ -13,20 +14,12 @@ export default class AccountMiddleware {
         .select("*")
         .first();
       if (!account) {
-        return res.status(404).json({
-          status: false,
-          message: "account does not exist",
-        });
+        return new Respond(false, "account does not exist", res, 404);
       }
       res.locals.account = account;
       next();
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({
-        success: false,
-        message: "An error occurred, please try again later.",
-        error,
-      });
+    } catch (error: any) {
+      return new ErrorException("Checking account failed", error.message, res);
     }
   }
 
@@ -34,46 +27,39 @@ export default class AccountMiddleware {
     try {
       const accountId = req.params.to_account;
       if (!isUuid(accountId)) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid transfer account id",
-        });
+        return new Respond(false, "Invalid transfer account id", res, 400);
       }
-      
+
       if (res.locals.account.account_id === accountId) {
-        return res.status(400).json({
-          success: false,
-          message: "Transaction failed",
-        });
+        return new Respond(
+          false,
+          "same account can't make transaction",
+          res,
+          400
+        );
       }
       const account = await db("accounts")
         .where({ account_id: accountId })
         .select("*")
         .first();
       if (!account) {
-        return res.status(404).json({
-          status: false,
-          message: "transfer account does not exist",
-        });
+        return new Respond(false, "transfer account does not exist", res, 404);
       }
       res.locals.to_account = account;
       next();
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({
-        success: false,
-        message: "An error occurred, please try again later.",
-        error: "We could not check account you're transfer money to",
-      });
+    } catch (error: any) {
+      return new ErrorException(
+        "Checking to_account failed",
+        error.message,
+        res
+      );
     }
   }
 
   static async checkBalance(req: Request, res: Response, next: NextFunction) {
     const account = res.locals.account;
     if (account.balance < req.body.amount) {
-      return res.status(400).json({
-        success: false,
-        message: "Insufficient fund",
+      return new Respond(false, "insufficient fund", res, 400, {
         balance: `${account.balance} ${account.currency}`,
       });
     }

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import ErrorException, { Respond } from "../../helpers/response";
 import { decodeToken } from "../../helpers/token";
 import UserServices from "../../services/user.services";
 
@@ -7,10 +8,7 @@ export default class AuthMiddleWare {
     const { email } = req.body;
     const exist = await UserServices.getUser(email);
     if (exist) {
-      return res.status(403).json({
-        status: false,
-        message: "email " + email + " already exists",
-      });
+      return new Respond(false, "email " + email + " already exists", res, 409);
     }
     next();
   }
@@ -18,10 +16,7 @@ export default class AuthMiddleWare {
   static async loggedInUser(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.headers.authorization) {
-        return res.status(400).json({
-          status: false,
-          message: "User not logged in",
-        });
+        return new Respond(false, "User not logged in", res, 400);
       }
       const { userId } = decodeToken(req.headers.authorization.split(" ")[1]);
       if (!userId) {
@@ -29,11 +24,8 @@ export default class AuthMiddleWare {
       }
       res.locals.userId = userId;
       next();
-    } catch (error) {
-      return res.status(400).json({
-        status: false,
-        message: "Invalid auth token",
-      });
+    } catch (error: any) {
+      return new ErrorException("Invalid auth token", error.message, res);
     }
   }
 }

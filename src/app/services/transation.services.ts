@@ -7,7 +7,8 @@ export default class TransactionService {
     try {
       await db("transactions").insert(transaction);
       return true;
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error.message);
       return false;
     }
   };
