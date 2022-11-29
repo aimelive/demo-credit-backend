@@ -11,7 +11,7 @@ export default class ErrorException {
     this.respond();
   }
   respond(): Response {
-    return this.res.status(400).json({
+    return this.res.status(500).json({
       success: false,
       message: this.message,
       error: this.error,
