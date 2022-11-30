@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const generateToken = (id: string) => {
-  const secret = process.env.JWT_TOKEN || "my-jwt-demo-credit=app-secret";
-  // console.log(secret);
+  const secret =
+    process.env.JWT_TOKEN_SECRET || "my-jwt-demo-credit=app-secret";
   return jwt.sign({ userId: id }, secret, {
     expiresIn: "24h",
   });
@@ -14,7 +14,7 @@ export const generateToken = (id: string) => {
 export function decodeToken(token: string): JwtPayload {
   const verify = jwt.verify(
     token,
-    process.env.JWT_TOKEN || "my-jwt-demo-credit=app-secret"
+    process.env.JWT_TOKEN_SECRET || "my-jwt-demo-credit=app-secret"
   );
   return verify as JwtPayload;
 }
