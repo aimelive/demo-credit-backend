@@ -15,6 +15,7 @@ Demo Credit is a mobile lending app that requires wallet functionality. This is 
 https://aime-ndayambaje-lendsqr-be-test.up.railway.app
 ```
 #### Run Postman
+N.B: Set an active environment before sending request, we'll set {{token}} variable after logging in or sign up.
 ```bash
 https://www.postman.com/aimelive/workspace/apps/request/19816222-f4e7ac50-a669-4ab7-b30a-318804cf9e86
 ```
