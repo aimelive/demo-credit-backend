@@ -1,8 +1,11 @@
 import knex from "knex";
 import knexConfig from "./knexfile";
 import { Model } from "objection";
+import dotenv from "dotenv";
 
-const db_connect = knexConfig["development"];
+dotenv.config();
+
+const db_connect = knexConfig[process.env.NODE_ENV || "development"];
 
 const knex_connect = knex(db_connect);
 

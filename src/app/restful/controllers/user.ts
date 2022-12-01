@@ -29,13 +29,16 @@ export default class UserController {
 
       //Encrypting user password
       const pwd = await hashPwd(req.body.password);
-
-      //Creating user
-      const userId = await db("users").insert({
+      const user = {
         account_id: accountId,
         password: pwd,
-        ...req.body,
-      });
+        fullname: req.body.fullname,
+        username: req.body.username,
+        email: req.body.email,
+        role: req.body.role,
+      };
+      //Creating user
+      const userId = await db("users").insert(user);
 
       //Creating user wallet
       await db("accounts").insert({
