@@ -126,10 +126,10 @@ describe("ROUTE /account", () => {
   describe("POST /transfer", () => {
     test("invalid transaction account", async () => {
       const response = await request(app)
-        .post("/api/v1/account/transfer/da28c4ac-590e-47aa-b368-8993bc1be823")
+        .post("/api/v1/account/transfer/fake-account")
         .send({ amount: 500 })
         .set("Authorization", `Bearer ${token}`);
-      expect(response.body.message).toContain("account does not exist");
+      expect(response.body.success).toEqual(false);
     });
   });
 });

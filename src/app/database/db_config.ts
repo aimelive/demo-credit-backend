@@ -5,7 +5,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const db_connect = knexConfig[process.env.NODE_ENV || "development"];
+/* You might need to remove 
+=== process.env.NODE_ENV || === 
+below to make tests work on development 
+environment  */
+
+const db_connect =
+  knexConfig[
+    process.env.NODE_ENV || //Comment this line to run all tests successfully
+      "development"
+  ];
 
 const knex_connect = knex(db_connect);
 
