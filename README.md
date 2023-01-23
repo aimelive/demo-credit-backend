@@ -12,7 +12,7 @@ Demo Credit is a lending app that includes wallet functionality. This is used as
 ### API Deployment & Documentation
 #### App URL
 ```bash
-https://aime-ndayambaje-lendsqr-be-test.up.railway.app
+https://demo-credit.up.railway.app/
 ```
 #### Run Postman
 N.B: Set an active environment before sending request, we'll set {{token}} variable after logging in or sign up.
