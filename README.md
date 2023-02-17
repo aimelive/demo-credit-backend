@@ -21,7 +21,7 @@ https://demo-credit.up.railway.app/
 #### Swagger Documentation
 
 ```bash
-Coming soon...
+https://demo-credit.up.railway.app/api/v1/docs
 ```
 
 ### Running locally
