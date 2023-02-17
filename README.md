@@ -54,18 +54,19 @@ https://github.com/aimelive/demo-credit-backend.git
 ### Using Docker
 
 - Clone this repository and navigate to the project root directory
-- Create `.env` file in the project root directory, fill out all variables basing on the ones specified in `.env.example` file
+- Create `.env` file in the project root directory, fill out all variables basing on the ones specified in `.env.example` file (Check the issues page for reference).
+- Next is to make sure that Docker is started and run this command in your terminal
+
+```bash
+docker-compose up --build
+```
 - Run the following command to create migrations and seeds
 
 ```bash
 npm run migrate && npm run seed
 ```
 
-- Run this docker command
 
-```bash
-docker-compose up --build
-```
 
 - Here you go, you can now run this application via containers exposed to your machine port specified in ${PORT} variable from `.env` file
 
