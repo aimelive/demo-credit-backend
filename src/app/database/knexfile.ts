@@ -5,8 +5,8 @@ dotenv.config();
 
 const knexConfig: { [key: string]: Knex.Config } = {
   production: {
-    client: "mysql",
-    connection: process.env.DB_MYSQL_URL,
+    client: "mysql2",
+    connection: process.env.PROD_DB_URL,
     pool: {
       min: 2,
       max: 10,
@@ -21,12 +21,12 @@ const knexConfig: { [key: string]: Knex.Config } = {
   },
   development: {
     client: "mysql",
-    connection: process.env.DEV_DB_URL || {
-      host: "localhost",
-      user: "root",
-      password: "",
-      database: "demo_credit",
-    },
+    /* To run locally for migration purpose I've found this:
+    - To do not use .dotenv variables
+    - The host here will be 'localhost' not 'db'as in container, because db network was exposed to localhost
+    sample connection string: "mysql://root:aime123@localhost:3306/demo_credit"
+     */
+    connection: process.env.DEV_DB_URL,
     pool: {
       min: 2,
       max: 10,

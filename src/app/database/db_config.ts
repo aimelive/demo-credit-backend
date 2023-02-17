@@ -2,9 +2,15 @@ import knex from "knex";
 import knexConfig from "./knexfile";
 import { Model } from "objection";
 import dotenv from "dotenv";
+import mysql from "mysql2";
 
 dotenv.config();
 
+export const con = mysql.createConnection(
+  process.env.NODE_ENV === "production"
+    ? process.env.PROD_DB_URL!
+    : process.env.DEV_DB_URL!
+);
 /* You might need to remove 
 === process.env.NODE_ENV || === 
 below to make tests work on development 

@@ -4,6 +4,7 @@ import { Respond } from "./app/helpers/response";
 import express, { Application } from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import { con } from "./app/database/db_config";
 
 dotenv.config();
 
@@ -25,7 +26,16 @@ app.get("/api/*", (req: Request, res: Response): Respond => {
   return new Respond(false, "path not found", res, 404);
 });
 app.listen(PORT, (): void => {
-  console.log("Server running on port " + PORT + " 🔥");
+  console.log(
+    "Server running on port " + PORT + " 🔥\nPath: http://localhost:" + PORT
+  );
+  con.connect((err) => {
+    if (err) {
+      console.log("Database not connected succesfully! Why? ", err);
+      return;
+    }
+    console.log("Database connected succesfully! 😂");
+  });
 });
 
 export default app;

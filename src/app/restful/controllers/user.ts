@@ -39,7 +39,6 @@ export default class UserController {
       };
       //Creating user
       const userId = await db("users").insert(user);
-
       //Creating user wallet
       await db("accounts").insert({
         account_id: accountId,
@@ -48,7 +47,7 @@ export default class UserController {
       });
 
       //Getting user data
-      const userData = await db("users").where({ id: userId }).first();
+      const userData = await db("users").where({ id: userId[0] }).first();
 
       const token = generateToken(`${userId}`); //Generate user id token expires in 4h
 
